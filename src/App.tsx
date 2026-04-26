@@ -292,10 +292,10 @@ export default function App() {
 
                 <div className="text-center space-y-2 sm:space-y-3">
                   <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-800 uppercase">
-                    Data Pihak Kedua
+                    Pakta Integritas Online
                   </h2>
-                  <p className="text-slate-400 text-[10px] sm:text-sm max-w-sm mx-auto uppercase tracking-widest font-bold">
-                    Penerima Persetujuan / Stakeholder
+                  <p className="text-slate-400 text-[8px] sm:text-sm max-w-sm mx-auto uppercase tracking-widest font-bold">
+                    Data Penerima Persetujuan / Stakeholder
                   </p>
                 </div>
 
