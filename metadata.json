@@ -1,0 +1,8 @@
+{
+  "name": "Pakta Integritas Online",
+  "description": "Platform digital untuk pengisian dan penandatanganan Pakta Integritas dengan verifikasi selfie dan timestamp otomatis.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}
