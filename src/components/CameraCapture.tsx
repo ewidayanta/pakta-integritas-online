@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 interface CameraCaptureProps {
   onCapture: (image: string) => void;
   savedImage?: string | null;
+  key?: string;
 }
 
 export default function CameraCapture({ onCapture, savedImage }: CameraCaptureProps) {
@@ -23,22 +24,64 @@ export default function CameraCapture({ onCapture, savedImage }: CameraCapturePr
     };
   }, [savedImage]);
 
-  const startCamera = async () => {
+  const startCamera = async (isRetry = false) => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError('Browser Anda tidak mendukung akses kamera atau sedang dalam mode tidak aman.');
+      return;
+    }
+
+    setIsReady(false);
+    setError(null);
+    
     try {
-      const constraints = {
-        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+      console.log(`Starting camera attempt (isRetry: ${isRetry})...`);
+      
+      const constraints: MediaStreamConstraints = {
+        video: isRetry ? true : { 
+          facingMode: 'user', 
+          width: { ideal: 640 }, 
+          height: { ideal: 480 }
+        },
         audio: false,
       };
+
       const newStream = await navigator.mediaDevices.getUserMedia(constraints);
       setStream(newStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = newStream;
+      
+      // We use a small delay to ensure the video element exists in the DOM
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = newStream;
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current?.play().catch(e => {
+               console.warn('Play error:', e);
+               // Handle auto-play restriction by letting user click capture which calls play if needed
+            });
+            setIsReady(true);
+            setError(null);
+          };
+        }
+      }, 150);
+
+    } catch (err: any) {
+      console.error('Camera access error:', err);
+      
+      if (!isRetry && (err.name === 'OverconstrainedError' || err.name === 'ConstraintNotSatisfiedError')) {
+        console.log('Overconstrained, retrying with simple constraints...');
+        startCamera(true);
+      } else if (!isRetry) {
+        startCamera(true);
+      } else {
+        let msg = 'Gagal mengakses kamera.';
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          msg = 'Izin kamera ditolak. Silakan berikan izin di pengaturan browser Anda.';
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          msg = 'Kamera tidak ditemukan di perangkat Anda.';
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          msg = 'Kamera sedang digunakan oleh aplikasi lain.';
+        }
+        setError(`${msg} (Error: ${err.name})`);
       }
-      setIsReady(true);
-      setError(null);
-    } catch (err) {
-      console.error('Error accessing camera:', err);
-      setError('Gagal mengakses kamera. Pastikan izin kamera telah diberikan.');
     }
   };
 
@@ -115,9 +158,18 @@ export default function CameraCapture({ onCapture, savedImage }: CameraCapturePr
         </div>
 
         {error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-red-900/80 p-6 text-center space-y-2">
-            <AlertCircle className="w-10 h-10" />
-            <p className="font-medium text-sm">{error}</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-red-900/90 p-6 text-center space-y-4">
+            <AlertCircle className="w-10 h-10 text-red-200" />
+            <div className="space-y-1">
+              <p className="font-bold text-sm">Akses Kamera Gagal</p>
+              <p className="text-[10px] leading-relaxed opacity-90">{error}</p>
+            </div>
+            <button 
+              onClick={() => startCamera()}
+              className="px-4 py-2 bg-white text-red-900 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors shadow-lg"
+            >
+              Coba Lagi
+            </button>
           </div>
         )}
       </div>
