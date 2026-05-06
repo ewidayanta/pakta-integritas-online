@@ -155,13 +155,13 @@ export default function App() {
       const logoData = await getBase64ImageFromUrl(logoUrl);
       // Logo on the left, max width 150px (~40mm)
       // Maintaining aspect ratio (Kemenkeu logo is roughly square)
-      doc.addImage(logoData, 'PNG', margin, 12, 25, 25);
+      doc.addImage(logoData, 'PNG', margin + 3, 12, 25, 25);
     } catch (e) {
       console.warn('Logo could not be loaded from primary URL, trying fallback', e);
       try {
         const fallbackUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Ministry_of_Finance_of_the_Republic_of_Indonesia_logo.svg/512px-Ministry_of_Finance_of_the_Republic_of_Indonesia_logo.svg.png';
         const logoData = await getBase64ImageFromUrl(fallbackUrl);
-        doc.addImage(logoData, 'PNG', margin, 12, 25, 25);
+        doc.addImage(logoData, 'PNG', margin + 3, 12, 25, 25);
       } catch (e2) {
         console.warn('Fallback logo also failed', e2);
       }
