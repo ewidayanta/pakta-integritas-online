@@ -127,7 +127,7 @@ export default function App() {
     const contentWidth = pageWidth - (margin * 2);
 
     // Header Section with Logo
-    const logoUrl = '/Kemenkeu-removebg (1).png'; 
+    const logoUrl = '/kemenkeu-bw.png'; 
       
     // Helper to fetch and convert logo using Image element for better CORS handling
     const getBase64ImageFromUrl = (imageUrl: string): Promise<string> => {
