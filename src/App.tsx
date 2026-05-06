@@ -888,19 +888,16 @@ export default function App() {
                 <div className="p-6 sm:p-10 space-y-6 sm:space-y-8">
                   <div className="space-y-4 sm:space-y-6">
                     {[
-  [
-  { label: 'Id Sertifikat', value: certId, mono: true },
-  { 
-    label: 'Penandatangan', 
-    value: namesKedua.join(', ').toUpperCase() 
-  },
-  { 
-    label: 'Instansi / Satker', 
-    value: `KPKNL PALEMBANG & ${agency.toUpperCase()}` 
-  },
-  { label: 'Waktu Persetujuan', value: timestamp }
-]
-].map((item, i) => (
+                      { label: 'Id Sertifikat', value: certId, mono: true },
+                      { 
+                        label: 'Penandatangan', 
+                        value: namesKedua.length > 1 
+                          ? namesKedua.map(n => n.toUpperCase()).join(', ')
+                          : namesKedua[0].toUpperCase() 
+                      },
+                      { label: 'Instansi / Satker', value: agency },
+                      { label: 'Waktu Persetujuan', value: timestamp }
+                    ].map((item, i) => (
                       <div key={i} className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-slate-50 pb-3 sm:pb-4 gap-1 sm:gap-4">
                         <span className="text-slate-400 uppercase text-[8px] sm:text-[10px] font-bold tracking-widest">{item.label}</span>
                         <span className={`text-slate-800 font-bold text-sm sm:text-base ${item.mono ? 'font-mono text-kemenkeu-navy truncate max-w-full' : 'break-words'}`}>{item.value}</span>
