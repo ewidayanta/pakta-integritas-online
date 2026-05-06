@@ -917,7 +917,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto px-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto px-2">
                 <button
                   onClick={handleReset}
                   className="px-6 py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-black transition-all order-3 sm:order-none"
@@ -932,14 +932,7 @@ export default function App() {
                   {isExporting ? <RotateCcw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4 text-kemenkeu-navy" />}
                   Download PDF
                 </button>
-                <button
-                  onClick={sharePdf}
-                  disabled={isExporting}
-                  className="px-6 py-4 bg-kemenkeu-navy text-white rounded-xl font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-kemenkeu-navy/20 disabled:opacity-50 group sm:col-span-2 md:col-span-1"
-                >
-                  {isExporting ? <RotateCcw className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4 text-kemenkeu-gold group-hover:scale-110 transition-transform" />}
-                  Share Dokumen
-                </button>
+                
               </div>
             </motion.div>
           )}
